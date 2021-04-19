@@ -1,6 +1,6 @@
 # 21a - Avaliação Prática 1
 
-Nessa avaliação iremos trabalhar com o módulo OLED1 (botões/ LEDs e Display), o mesmo já está disponível no repositório da avaliação. 
+Nessa avaliação iremos trabalhar com o módulo OLED1 (botões / LEDs e Display), o mesmo já está disponível no repositório da avaliação. 
 
 - Atualize o arquivo `ALUNO.json` com seu nome e e-mail e faça um commit imediatamente.
 
