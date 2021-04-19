@@ -26,12 +26,12 @@
 
 #define BUT_2_PIO PIOA
 #define BUT_2_PIO_ID ID_PIOA
-#define BUT_2_IDX 19
+#define BUT_2_IDX 31
 #define BUT_2_IDX_MASK (1u << BUT_2_IDX)
 
 #define BUT_3_PIO PIOC
 #define BUT_3_PIO_ID ID_PIOC
-#define BUT_3_IDX 31
+#define BUT_3_IDX 19
 #define BUT_3_IDX_MASK (1u << BUT_3_IDX)
 
 void but1_callback(void) { }
