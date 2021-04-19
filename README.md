@@ -27,11 +27,11 @@ Nessa avaliação iremos trabalhar com o OLED1 e iremos desenvolver um protótip
 O protótipo deve possuir o seguinte comportamento:
 
 - A senha é definida por uma sequência dos botões 1, 2 e 3 da placa OLED (B1, B2 e B3).
-- O cofre possui uma senha fixa de tamanho 4 definido previamente por: `[B1 B1 B2 B3]`.
-- Exibe no LCD um `*` para cada botão apertado 
+- O cofre deve possuir uma senha fixa de tamanho 4 definido previamente por: `[B1 B1 B2 B3]`.
+- Para cada vez que um botão for apertado deve exibir um `*`
 - Se a senha estiver correta, abre o cofre.
 - Senha errada:
-    - Bloqueia botões por 4 segundos (deve usar **RTT**)
+    - Bloqueia os botões por 4 segundos (deve-se usar **RTT**)
     - Exibe no LCD: `Senha errada` / `Bloqueado`
 - Cofre fechado:
     - Exibe no LCD: `Cofre Trancado`
