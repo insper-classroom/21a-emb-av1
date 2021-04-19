@@ -1,23 +1,26 @@
 # 21a - Avaliação Prática 1
 
-Nessa avaliação iremos trabalhar com o módulo OLED1 (botões / LEDs e Display), o mesmo já está disponível no repositório da avaliação. 
+Leia atentamente as informações aseguir:
 
-- Atualize o arquivo `ALUNO.json` com seu nome e e-mail e faça um commit imediatamente.
-
->  Faça o seu trabalho de maneira ética!
-
-- **A cada 30 minutos você deverá fazer um commit no seu código!**
+1. Atualize o arquivo `ALUNO.json` com seu nome e e-mail e faça um commit imediatamente.
+1. **Faça o seu trabalho de maneira ética!**
+1. **A cada 30 minutos você deverá fazer um commit no seu código!**
     - Códigos que não tiverem commit a cada 30min ou que mudarem drasticamente entre os commits serão descartados (conceito I) !!
     - Você deve inserir mensagens condizentes nos commits!
-- Duração: 3h
-- Usar o código exemplo neste repositório que já configura os botões, leds e diplay do módulo OLED1.
+1. Duração: 3h
+1. Usar o código exemplo deste repositório, ele já possui:
+    - botões com interrupção
+    - leds 
+    - diplay do módulo OLED1
+    - TC/ RTT e RTC adicionados no wizard
 
-:triangular_flag_on_post: **Ao finalizar a entrega preencher o formulário (uma única vez!): TODO INSERIR LINK**
+:triangular_flag_on_post: **Ao finalizar a entrega preencher o formulário (uma única vez!): https://docs.google.com/forms/d/e/1FAIpQLSf5zNFzO8V2a8Db53aqNy4QmJU2UQbc5kV0Cdrh7E73m9SD9A/viewform?usp=sf_link**
+
+Utilize o projeto exemplo que se encontra neste repositório, nele os 
 
 ## Descrição
 
 Nessa avaliação iremos trabalhar com o OLED1 e iremos desenvolver um protótipo de um  **cofre digital**. 
-
 ![](figs/cofre.png)
 
 > Figura meramente ilustrativa =) [src](https://www.celeti.com.br/cofre-unee-classic-keypad-ucdck)
@@ -28,18 +31,18 @@ O protótipo deve possuir o seguinte comportamento:
 
 - A senha é definida por uma sequência dos botões 1, 2 e 3 da placa OLED (B1, B2 e B3).
 - O cofre deve possuir uma senha fixa de tamanho 4 definido previamente por: `[B1 B1 B2 B3]`.
-- Para cada vez que um botão for apertado deve exibir um `*`
+- Para cada vez que um botão for apertado deve exibir um `*` no display.
 - Se a senha estiver correta, abre o cofre.
 - Senha errada:
-    - Bloqueia os botões por 4 segundos (deve-se usar **RTT**)
-    - Exibe no LCD: `Senha errada` / `Bloqueado`
+    - Bloqueia os botões por 4 segundos (deve-se usar **RTT**).
+    - Exibe no LCD: `Senha errada` / `Bloqueado`.
 - Cofre fechado:
-    - Exibe no LCD: `Cofre Trancado`
-    - Todos os LEDs acesos
+    - Exibe no LCD: `Cofre Trancado`.
+    - Todos os LEDs acesos.
 - Cofre aberto:
-    - Exibe no LCD: `Cofre Aberto`
-    - Todos os LEDs apagados
-- Para trancar o cofre é necessário apertar o botão 1
+    - Exibe no LCD: `Cofre Aberto`.
+    - Todos os LEDs apagados.
+- Para trancar o cofre é necessário apertar o botão 1.
 
 Requisitos de firmware:
 
