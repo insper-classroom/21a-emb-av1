@@ -3,6 +3,8 @@
 #include "oled/gfx_mono_ug_2832hsweg04.h"
 #include "oled/gfx_mono_text.h"
 #include "oled/sysfont.h"
+#include "PIO_FUNCTIONS.h"
+#include "TC-RTT-RTC.h"
 
 #define LED_1_PIO PIOA
 #define LED_1_PIO_ID ID_PIOA
@@ -24,21 +26,93 @@
 #define BUT_1_IDX 28
 #define BUT_1_IDX_MASK (1u << BUT_1_IDX)
 
-#define BUT_2_PIO PIOA
-#define BUT_2_PIO_ID ID_PIOA
+#define BUT_2_PIO PIOC
+#define BUT_2_PIO_ID ID_PIOC
 #define BUT_2_IDX 31
 #define BUT_2_IDX_MASK (1u << BUT_2_IDX)
 
-#define BUT_3_PIO PIOC
-#define BUT_3_PIO_ID ID_PIOC
+#define BUT_3_PIO PIOA
+#define BUT_3_PIO_ID ID_PIOA
 #define BUT_3_IDX 19
 #define BUT_3_IDX_MASK (1u << BUT_3_IDX)
 
-void but1_callback(void) { }
+// setando as variaveis do projeto
 
-void but2_callback(void) { }
+volatile char flag_but1 = 0;
+volatile char flag_but2 = 0;
+volatile char flag_but3 = 0;
+volatile char rtt_flag = 0;
+volatile char cofre_aberto = 0;
 
-void but3_callback(void) { }
+int senha[] = {0, 0, 0, 0};
+int gabarito[] = {1, 1, 2, 3};
+	
+
+int contador = 0;
+
+void but1_callback(void) {
+	flag_but1 = 1;
+}
+
+void but2_callback(void) {
+	flag_but2 = 1;
+}
+
+void but3_callback(void) {
+	flag_but3 = 1;
+}
+
+void RTT_Handler(void) {
+	uint32_t ul_status;
+
+	/* Get RTT status - ACK */
+	ul_status = rtt_get_status(RTT);
+
+	/* IRQ due to Time has changed */
+	if ((ul_status & RTT_SR_ALMS) == RTT_SR_ALMS) {
+		rtt_flag = 0;
+		gfx_mono_draw_string("Cofre fechado", 0,0, &sysfont);
+		gfx_mono_draw_string("         ", 0,18, &sysfont);
+		contador = 0;		
+	}
+}
+
+void verifica_senhas(void) {
+	for (int i = 0; i < 4; i++){
+		if (senha[i] != gabarito[i]) {
+			RTT_init(4, 16, RTT_MR_ALMIEN);
+			rtt_flag = 1;
+			gfx_mono_draw_string("Senha errada ", 0,0, &sysfont);
+			gfx_mono_draw_string("Bloqueado", 0,18, &sysfont);
+			return;
+		}
+	}
+	gfx_mono_draw_string("Cofre aberto ", 0,0, &sysfont);
+	gfx_mono_draw_string("         ", 0,18, &sysfont);
+	pin_toggle(LED_1_PIO, LED_1_IDX_MASK);
+	pin_toggle(LED_2_PIO, LED_2_IDX_MASK);
+	pin_toggle(LED_3_PIO, LED_3_IDX_MASK);
+	contador = 0;
+	cofre_aberto = 1;
+	
+}
+
+void desenha_asterisco(void) {
+	gfx_mono_draw_string("Cofre fechado", 0,0, &sysfont);
+	
+	if (contador == 0) {
+		gfx_mono_draw_string("      ", 0,18, &sysfont);
+	} else if (contador == 1) {
+		 gfx_mono_draw_string("*     ", 0,18, &sysfont);
+	} else if (contador == 2) {
+		 gfx_mono_draw_string("**      ", 0,18, &sysfont);
+	} else if (contador == 3) {
+		 gfx_mono_draw_string("***     ", 0,18, &sysfont);
+	} else if (contador == 4) {
+		 gfx_mono_draw_string("****    ", 0,18, &sysfont);
+	}
+	
+}
 
 void io_init(void) {
   pmc_enable_periph_clk(LED_1_PIO_ID);
@@ -87,8 +161,52 @@ int main(void) {
   delay_init();
   io_init();
   gfx_mono_ssd1306_init();
-  
+  gfx_mono_draw_string("Cofre fechado", 0,0, &sysfont);
   while (1) {
-    
+	  
+	  if (!rtt_flag && !cofre_aberto) {
+		
+		
+		if (flag_but1) {
+			senha[contador] = 1;	
+			contador += 1;
+			
+			flag_but1 = 0;
+		
+		}
+		
+		if (flag_but2) {
+			senha[contador] = 2;
+			contador += 1;
+			
+			flag_but2 = 0;
+		}  
+	  
+		if (flag_but3) {
+			senha[contador] = 3;
+			contador += 1;
+			
+			flag_but3 = 0;
+		}
+		
+		desenha_asterisco();
+		if (contador == 4) {
+			verifica_senhas();
+		}
+		
+	  }
+	  
+	  if (cofre_aberto) {
+		  if (flag_but1) {
+			  cofre_aberto = 0;		
+			  pin_toggle(LED_1_PIO, LED_1_IDX_MASK);
+			  pin_toggle(LED_2_PIO, LED_2_IDX_MASK);
+			  pin_toggle(LED_3_PIO, LED_3_IDX_MASK);
+			  gfx_mono_draw_string("Cofre fechado", 0,0, &sysfont);	  
+			  flag_but1 = 0;
+		  }
+	  }
+	  pmc_sleep(SAM_PM_SMODE_SLEEP_WFI);
+	  
   }
 }
